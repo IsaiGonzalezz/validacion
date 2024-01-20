@@ -1,37 +1,34 @@
-// app.js
+import {getAuth, signInWithEmailAndPassword} from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+var firebaseConfig = {
+  apiKey: "AIzaSyDuy80WWr13fQXBj_zw0UFhwZjXzkluD-s",
+  authDomain: "web40-c19a8.firebaseapp.com",
+  projectId: "web40-c19a8",
+  storageBucket: "web40-c19a8.appspot.com",
+  messagingSenderId: "422459363344",
+  appId: "1:422459363344:web:ce5ce2d0393fa5d6b43a95",
+  measurementId: "G-GYE8X6TKNH",
+};
 
-// Importar el módulo de autenticación de Firebase
-const auth = firebase.auth();
+// Initialize Firebase
+var app = initializeApp(firebaseConfig);
 
-// Función para iniciar sesión
-function loginUser() {
-  var email = document.getElementById("correo").value;
-  var password = document.getElementById("contrasena").value;
+var auth = getAuth(app);
 
-  console.log(`correo: ${email}, contraseña: ${password}`);
+const formLogin = document.querySelector("#formLogin");
 
-  auth.signInWithEmailAndPassword(email, password)
-    .then((success) => {
-      console.log("Inicio de sesión exitoso");
-    })
-    .catch((error) => {
-      console.error("Error al iniciar sesión", error.message);
-    });
-}
+formLogin.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = document.querySelector("#email").value;
+  const password = document.querySelector("#password").value;
 
-// Función para cerrar sesión
-function logoutUser() {
-  firebase.auth().signOut()
-    .then(() => {
-      // Se cerró sesión exitosamente
-      alert('Cerrar sesión')
-      console.log("Cierre de sesión exitoso");
-      window.location.replace("/index.html");
-    })
-    .catch((error) => {
-      // Si hay un error, manejarlo adecuadamente
-      console.error("Error al cerrar sesión", error.message);
-      // Puedes mostrar un mensaje de error al usuario aquí
-    });
-}
+  signInWithEmailAndPassword(auth,email,password).then(cred=>{
+    alert('Credenciales Correctas/signIn');
+    console.log('credeciales correctas');
+    console.log(cred.user)
+  }).catch(e=>{
+    const errorCode = e.code;
+    console.log(errorCode);
+  })
 
+});
